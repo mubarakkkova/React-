@@ -1,40 +1,50 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import MovieCard from './MovieCard.jsx'
 import './MovieList.css'
+import Spinner from './Spinner.jsx'
+import ErrorBox from './ErrorBox.jsx'
+import { searchItems } from '../services/itemsService.js'
 
 export default function MovieList() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [search, setSearch] = useState('')
 
-  const load = async () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get('q') || ''
+
+  const load = async (query) => {
     try {
       setError(null)
       setLoading(true)
-      const res = await fetch('https://ghibliapi.vercel.app/films')
-      if (!res.ok) throw new Error('Network error')
-      const data = await res.json()
-      setItems(data.slice(0, 12))
+      const data = await searchItems(query)
+      setItems(data)
     } catch (e) {
-      setError(e.message)
+      setError(e.message || 'Network error')
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    load()
-  }, [])
+    load(q)
+  }, [q])
 
-  const query = search.trim().toLowerCase()
-  const visible = items.filter(m => m.title.toLowerCase().includes(query))
-  const clearSearch = () => setSearch('')
+  const handleSearchChange = (e) => {
+    const value = e.target.value
+    if (value) setSearchParams({ q: value })
+    else setSearchParams({})
+  }
+
+  const clearSearch = () => setSearchParams({})
 
   return (
     <section>
-      <button className="load-btn" onClick={load} disabled={loading}>
-        {loading ? 'Loading…' : 'Reload movies'}
+      <h1>Products List</h1>
+
+      <button className="load-btn" onClick={() => load(q)} disabled={loading}>
+        {loading ? 'Loading…' : 'Reload items'}
       </button>
 
       <div className="search-row" role="search">
@@ -42,14 +52,14 @@ export default function MovieList() {
           className="search-input"
           type="text"
           placeholder="Search by title…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          aria-label="Search movies by title"
+          value={q}
+          onChange={handleSearchChange}
+          aria-label="Search items by title"
         />
         <button
           className="clear-btn"
           onClick={clearSearch}
-          disabled={!search}
+          disabled={!q}
           aria-label="Clear search"
           title="Clear"
         >
@@ -57,19 +67,23 @@ export default function MovieList() {
         </button>
       </div>
 
-      {error && <div className="status">Error: {error}</div>}
-      {!loading && items.length === 0 && !error && (
-        <div className="status">No movies found.</div>
+      {loading && <Spinner />}
+
+      {error && !loading && <ErrorBox message={error} />}
+
+      {!loading && !error && items.length === 0 && (
+        <div className="status">No items found.</div>
       )}
-      {items.length > 0 && (
+
+      {items.length > 0 && !loading && !error && (
         <div className="status">
-          Showing {visible.length} of {items.length}
-          {query ? ` for “${search}”` : ''}
+          Showing {items.length} item{items.length !== 1 ? 's' : ''}
+          {q ? ` for “${q}”` : ''}
         </div>
       )}
 
       <ul className="movie-list" aria-live="polite">
-        {visible.map((m) => (
+        {items.map(m => (
           <li key={m.id} className="movie-list__item">
             <MovieCard movie={m} />
           </li>

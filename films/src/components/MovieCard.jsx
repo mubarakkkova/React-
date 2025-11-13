@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './MovieCard.css'
 
 export default function MovieCard({ movie }) {
-  const { title, director, release_date, image, movie_banner, rt_score } = movie
-  const cover = image || movie_banner
+  const { id, title, brand, category, price, thumbnail, rating } = movie
+  const cover = thumbnail
 
   return (
     <article className="card">
@@ -15,9 +16,30 @@ export default function MovieCard({ movie }) {
 
       <div className="card__body">
         <h3 className="card__title">{title}</h3>
-        <p className="card__meta"><strong>Director:</strong> {director}</p>
-        <p className="card__meta"><strong>Release:</strong> {release_date}</p>
-        {rt_score && <p className="card__meta"><strong>RT score:</strong> {rt_score}</p>}
+        {brand && (
+          <p className="card__meta">
+            <strong>Brand:</strong> {brand}
+          </p>
+        )}
+        {category && (
+          <p className="card__meta">
+            <strong>Category:</strong> {category}
+          </p>
+        )}
+        <p className="card__meta">
+          <strong>Price:</strong> ${price}
+        </p>
+        {rating != null && (
+          <p className="card__meta">
+            <strong>Rating:</strong> {rating}
+          </p>
+        )}
+
+        <p className="card__meta" style={{ marginTop: '8px' }}>
+          <Link to={`/items/${id}`} style={{ color: '#8ba6f0', textDecoration: 'none' }}>
+            View details →
+          </Link>
+        </p>
       </div>
     </article>
   )
