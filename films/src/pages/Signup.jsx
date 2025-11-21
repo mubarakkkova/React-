@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext.jsx'
 import Spinner from '../components/Spinner.jsx'
 import ErrorBox from '../components/ErrorBox.jsx'
 
-export default function Login() {
-  const { login } = useAuth()
+export default function Signup() {
+  const { signup } = useAuth()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -19,10 +20,10 @@ export default function Login() {
 
     try {
       setLoading(true)
-      await login(email, password)
+      await signup(email, password)
       navigate('/profile')
     } catch (e) {
-      setError(e.message || 'Failed to log in')
+      setError(e.message || 'Failed to sign up')
     } finally {
       setLoading(false)
     }
@@ -30,7 +31,7 @@ export default function Login() {
 
   return (
     <section>
-      <h1>Login</h1>
+      <h1>Signup</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: '360px' }}>
         <div style={{ marginBottom: '12px' }}>
           <label style={{ display: 'block', marginBottom: '4px' }}>
@@ -63,7 +64,7 @@ export default function Login() {
           className="load-btn"
           disabled={loading}
         >
-          {loading ? 'Logging in…' : 'Login'}
+          {loading ? 'Signing up…' : 'Create account'}
         </button>
       </form>
 
@@ -71,9 +72,9 @@ export default function Login() {
       {error && !loading && <ErrorBox message={error} />}
 
       <p style={{ marginTop: '16px', fontSize: '14px' }}>
-        Don&apos;t have an account?{' '}
-        <Link to="/signup" style={{ color: '#4b5cb1' }}>
-          Go to signup
+        Already have an account?{' '}
+        <Link to="/login" style={{ color: '#4b5cb1' }}>
+          Back to login
         </Link>
       </p>
     </section>

@@ -4,7 +4,7 @@ import SearchForm from "./components/SearchForm.jsx";
 import AreaFilter from "./components/AreaFilter.jsx";
 import MealGrid from "./components/MealGrid.jsx";
 import Loading from "./components/Loading.jsx";
-import ErrorMsg from "./components/ErrorMsg.jsx";
+import ErrorMsg from "./Components/ErrorMsg.jsx";
 
 const API = "https://www.themealdb.com/api/json/v1/1";
 

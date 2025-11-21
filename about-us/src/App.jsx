@@ -5,7 +5,7 @@ export default function App() {
           {/* левый баннер (виден на десктопе) */}
           <aside className="left-header">
             <div className="v-center-box">
-              <h2 className="mb-0">About Us</h2>
+              <h2 className="mb-0">About me</h2>
             </div>
           </aside>
   
@@ -13,16 +13,13 @@ export default function App() {
           <section className="content">
             <div className="main-content">
               <header className="main-header">
-                <h6 className="sub-heading">Who we are</h6>
-                <h1 className="main-heading">&lt; About &gt;</h1>
+                <h6 className="sub-heading">Who i am</h6>
+                <h1 className="main-heading">&lt; Danelya Mubarakova  &gt;</h1>
               </header>
   
               <div className="about-row">
                 <div className="about-image">
-                  <img
-                    src="https://source.unsplash.com/35sVnCCynWA/784x1250"
-                    alt="Colorful Wall"
-                  />
+                <img src="/me.jpg" alt="My photo" />
                 </div>
   
                 <div className="about-text">

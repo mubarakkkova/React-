@@ -1,19 +1,36 @@
 @import url('https://use.fontawesome.com/releases/v5.6.1/css/all.css');
 @import url('https://fonts.googleapis.com/css?family=Cairo:300,600,700,900');
 
-:root { --text:#494949; --muted:#6c757d; --border:#dee2e6; --accent:#f12d2d; --bg:#fff; --card:#fff; }
+:root{
+  --text:#494949;
+  --muted:#6c757d;
+  --border:#dee2e6;
+  --accent:#f12d2d;
+  --bg:#fff;
+  --card:#fff;
+  --panel:#e7bdd0; 
+}
+
 *{box-sizing:border-box}
 html,body,#root{height:100%}
-body{margin:0;font-family:'Cairo',ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:300;letter-spacing:.025rem;color:var(--text);background:var(--bg)}
+body{
+  margin:0;
+  font-family:'Cairo',ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-weight:300; letter-spacing:.025rem; color:var(--text); background:var(--bg);
+}
 h1{font-weight:900;margin:0} h2,h3{font-weight:700;margin:0} h4,h5,h6{font-weight:600;margin:0}
 p{color:var(--muted);margin:0} img{max-width:100%;display:block}
 
 .about-section{width:100%;min-height:100vh}
 .layout{display:grid;grid-template-columns:1fr;min-height:100vh}
 
-.left-header{display:none;position:sticky;top:0;left:0;color:#fff;height:100vh;width:100%;
-  background-image:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.5)),url('https://source.unsplash.com/4kkYkFNfJV8/706x900');
-  background-size:cover;padding:4rem}
+
+.left-header{
+  display:none; position:sticky; top:0; left:0; color:#fff; height:100vh; width:100%;
+  background-color:var(--panel) !important;
+  background-image:none !important;
+  background-size:cover; padding:4rem;
+}
 .left-header::before{background:#fff;position:absolute;content:'';bottom:50px;left:30px;margin:0 1rem;width:80%;height:2px}
 .left-header::after{background:#fff;position:absolute;content:'';bottom:50px;left:30px;margin:0 1rem;height:80%;width:2px}
 .left-header h2{margin-left:4rem}
@@ -42,7 +59,11 @@ a{color:#06c;text-decoration:none} a:hover{text-decoration:underline}
 .icon-18{font-size:1.8rem;color:var(--accent)}
 
 .about-data{position:relative;margin-top:24px}
-.about-data::before{position:absolute;content:'\003c/ ABOUT \003e';top:0;left:50%;transform:translate(-50%,-60%);text-align:center;font-size:.8rem;font-weight:900;color:var(--border);background:#fff;width:8rem}
+.about-data::before{
+  position:absolute; content:'Hobby'; top:0; left:50%;
+  transform:translate(-50%,-60%); text-align:center; font-size:.8rem;
+  font-weight:900; color:var(--border); background:#fff; width:8rem;
+}
 .stats-row{display:grid;grid-template-columns:1fr;gap:16px;padding-top:24px;border-top:1px solid var(--border)}
 .data-number{color:var(--text);font-size:1.2rem;font-weight:700}
 .data-label{text-transform:uppercase}
@@ -60,4 +81,6 @@ a{color:#06c;text-decoration:none} a:hover{text-decoration:underline}
   .main-content{padding:2.5rem 2rem}
   .left-header::before{width:70%}
 }
-@media (min-height:590px){ .left-header::after{height:85%} }
+@media (min-height:590px){
+  .left-header::after{height:85%}
+}
