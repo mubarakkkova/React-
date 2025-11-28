@@ -1,37 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import MovieCard from './MovieCard.jsx'
 import './MovieList.css'
 import Spinner from './Spinner.jsx'
 import ErrorBox from './ErrorBox.jsx'
-import { searchItems } from '../services/itemsService.js'
+import { fetchItems } from '../features/items/itemsSlice.js'
 
 export default function MovieList() {
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-
+  const dispatch = useDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
 
-  const load = async (query) => {
-    try {
-      setError(null)
-      setLoading(true)
-      const data = await searchItems(query)
-      setItems(data)
-    } catch (e) {
-      setError(e.message || 'Network error')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const {
+    list,
+    loadingList,
+    errorList,
+  } = useSelector(state => state.items)
 
   useEffect(() => {
-    load(q)
-  }, [q])
+    dispatch(fetchItems(q))
+  }, [q, dispatch])
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = e => {
     const value = e.target.value
     if (value) setSearchParams({ q: value })
     else setSearchParams({})
@@ -43,8 +34,12 @@ export default function MovieList() {
     <section>
       <h1>Products List</h1>
 
-      <button className="load-btn" onClick={() => load(q)} disabled={loading}>
-        {loading ? 'Loading…' : 'Reload items'}
+      <button
+        className="load-btn"
+        onClick={() => dispatch(fetchItems(q))}
+        disabled={loadingList}
+      >
+        {loadingList ? 'Loading…' : 'Reload items'}
       </button>
 
       <div className="search-row" role="search">
@@ -67,23 +62,23 @@ export default function MovieList() {
         </button>
       </div>
 
-      {loading && <Spinner />}
+      {loadingList && <Spinner />}
 
-      {error && !loading && <ErrorBox message={error} />}
+      {errorList && !loadingList && <ErrorBox message={errorList} />}
 
-      {!loading && !error && items.length === 0 && (
+      {!loadingList && !errorList && list.length === 0 && (
         <div className="status">No items found.</div>
       )}
 
-      {items.length > 0 && !loading && !error && (
+      {list.length > 0 && !loadingList && !errorList && (
         <div className="status">
-          Showing {items.length} item{items.length !== 1 ? 's' : ''}
+          Showing {list.length} item{list.length !== 1 ? 's' : ''}
           {q ? ` for “${q}”` : ''}
         </div>
       )}
 
       <ul className="movie-list" aria-live="polite">
-        {items.map(m => (
+        {list.map(m => (
           <li key={m.id} className="movie-list__item">
             <MovieCard movie={m} />
           </li>

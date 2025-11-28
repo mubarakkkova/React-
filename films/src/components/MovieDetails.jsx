@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from './Spinner.jsx'
 import ErrorBox from './ErrorBox.jsx'
-import { getItemById } from '../services/itemsService.js'
+import { fetchItemById } from '../features/items/itemsSlice.js'
 
 export default function MovieDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const [item, setItem] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [notFound, setNotFound] = useState(false)
+  const {
+    selectedItem,
+    loadingItem,
+    errorItem,
+  } = useSelector(state => state.items)
 
   useEffect(() => {
-    async function load() {
-      try {
-        setLoading(true)
-        setError(null)
-        setNotFound(false)
-        const data = await getItemById(id)
-        setItem(data)
-      } catch (e) {
-        const msg = e.message || ''
-        if (msg.includes('404')) setNotFound(true)
-        else setError(msg || 'Failed to load item')
-      } finally {
-        setLoading(false)
-      }
+    if (id) {
+      dispatch(fetchItemById(id))
     }
-    load()
-  }, [id])
+  }, [id, dispatch])
 
-  if (loading) return <Spinner />
-  if (error) return <ErrorBox message={error} />
-  if (notFound) return <p>Item not found.</p>
-  if (!item) return null
+  if (loadingItem) return <Spinner />
+  if (errorItem) return <ErrorBox message={errorItem} />
+  if (!selectedItem) return <p>Item not found.</p>
 
   const {
     title,
@@ -46,8 +35,8 @@ export default function MovieDetails() {
     rating,
     stock,
     discountPercentage,
-    thumbnail
-  } = item
+    thumbnail,
+  } = selectedItem
 
   return (
     <section>
@@ -66,13 +55,13 @@ export default function MovieDetails() {
             width: '100%',
             borderRadius: '10px',
             marginBottom: '16px',
-            boxShadow: '0 8px 18px rgba(0,0,0,.25)'
+            boxShadow: '0 8px 18px rgba(0,0,0,.25)',
           }}
         />
       )}
 
       <ul>
-        <li><strong>ID:</strong> {item.id}</li>
+        <li><strong>ID:</strong> {selectedItem.id}</li>
         <li><strong>Brand:</strong> {brand}</li>
         <li><strong>Category:</strong> {category}</li>
         <li><strong>Price:</strong> ${price}</li>
