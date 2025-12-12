@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Spinner from './Spinner.jsx'
 import ErrorBox from './ErrorBox.jsx'
 import { fetchItemById } from '../features/items/itemsSlice.js'
+import { useFavorites } from '../hooks/useFavorites.js'
 
 export default function MovieDetails() {
   const { id } = useParams()
@@ -15,6 +16,9 @@ export default function MovieDetails() {
     loadingItem,
     errorItem,
   } = useSelector(state => state.items)
+
+  // 🔥 custom hook
+  const { isFavorite, toggle } = useFavorites(selectedItem?.id)
 
   useEffect(() => {
     if (id) {
@@ -46,6 +50,24 @@ export default function MovieDetails() {
 
       <h1>{title}</h1>
 
+      {/* FAVORITES BUTTON */}
+      <button
+        type="button"
+        onClick={() => toggle(selectedItem.id)}
+        style={{
+          marginBottom: '16px',
+          borderRadius: '8px',
+          border: 'none',
+          padding: '8px 14px',
+          cursor: 'pointer',
+          fontWeight: 700,
+          background: isFavorite ? '#ffd3e1' : '#e3e8fa',
+          color: '#151934',
+        }}
+      >
+        {isFavorite ? '★ Remove from favorites' : '☆ Add to favorites'}
+      </button>
+
       {thumbnail && (
         <img
           src={thumbnail}
@@ -61,7 +83,6 @@ export default function MovieDetails() {
       )}
 
       <ul>
-        <li><strong>ID:</strong> {selectedItem.id}</li>
         <li><strong>Brand:</strong> {brand}</li>
         <li><strong>Category:</strong> {category}</li>
         <li><strong>Price:</strong> ${price}</li>

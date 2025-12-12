@@ -8,15 +8,16 @@ async function handleResponse(res) {
   return res.json()
 }
 
-export async function searchItems(query) {
+
+export async function searchItems(query = '', limit = 5, skip = 0) {
   const url = query
-    ? `${BASE_URL}/search?q=${encodeURIComponent(query)}`
-    : `${BASE_URL}?limit=30`
+    ? `${BASE_URL}/search?q=${encodeURIComponent(query)}&limit=${limit}&skip=${skip}`
+    : `${BASE_URL}?limit=${limit}&skip=${skip}`
 
   const res = await fetch(url)
-  const data = await handleResponse(res)
-  return data.products ?? []
+  return handleResponse(res)
 }
+
 
 export async function getItemById(id) {
   const res = await fetch(`${BASE_URL}/${id}`)

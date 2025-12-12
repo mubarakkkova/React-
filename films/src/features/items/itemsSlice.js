@@ -1,20 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { searchItems, getItemById } from '../../services/itemsService.js'
 
-// thunk для списка
+
 export const fetchItems = createAsyncThunk(
   'items/fetchItems',
-  async (query, thunkAPI) => {
+  async ({ query = '', page = 1 }, thunkAPI) => {
     try {
-      const data = await searchItems(query || '')
-      return { data, query: query || '' }
+      const limit = 5
+      const skip = (page - 1) * limit
+
+      const data = await searchItems(query, limit, skip)
+
+      return {
+        list: data.products,
+        total: data.total,
+        query,
+        page,
+      }
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message || 'Failed to load items')
     }
   }
 )
 
-// thunk для одного элемента
 export const fetchItemById = createAsyncThunk(
   'items/fetchItemById',
   async (id, thunkAPI) => {
@@ -27,15 +35,23 @@ export const fetchItemById = createAsyncThunk(
   }
 )
 
+
 const initialState = {
   list: [],
   selectedItem: null,
+
   loadingList: false,
   loadingItem: false,
+
   errorList: null,
   errorItem: null,
+
   query: '',
+  page: 1,
+  limit: 5,
+  total: 0,
 }
+
 
 const itemsSlice = createSlice({
   name: 'items',
@@ -47,17 +63,18 @@ const itemsSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    // список
+    // ===== LIST =====
     builder
       .addCase(fetchItems.pending, state => {
         state.loadingList = true
         state.errorList = null
-        state.list = []
       })
       .addCase(fetchItems.fulfilled, (state, action) => {
         state.loadingList = false
-        state.list = action.payload.data
+        state.list = action.payload.list
+        state.total = action.payload.total
         state.query = action.payload.query
+        state.page = action.payload.page
         state.errorList = null
       })
       .addCase(fetchItems.rejected, (state, action) => {
@@ -66,7 +83,6 @@ const itemsSlice = createSlice({
         state.list = []
       })
 
-    // детали
     builder
       .addCase(fetchItemById.pending, state => {
         state.loadingItem = true
@@ -87,5 +103,4 @@ const itemsSlice = createSlice({
 })
 
 export const { clearSelectedItem } = itemsSlice.actions
-
 export default itemsSlice.reducer
