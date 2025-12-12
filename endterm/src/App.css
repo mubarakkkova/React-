@@ -1,42 +1,123 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+:root {
+  font-family: system-ui, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f5fb;
+  color: #333;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #4b5cb1;
+}
+
+button.load-btn {
+  background: #8ba6f0;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+button.load-btn:hover {
+  background: #7a96e0;
+}
+button.load-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #6a6f85;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d6eb;
+  background: #ffffff;
+  color: #333;
+  outline: none;
+}
+.search-input::placeholder {
+  color: #a1a7c2;
+}
+
+button.clear-btn {
+  background: #e3e8fa;
+  border: none;
+  color: #4b5cb1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button.clear-btn:hover {
+  background: #d6def7;
+}
+button.clear-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #151934;
+  color: #ffffff;
+}
+
+.navbar__brand {
+  font-weight: 600;
+}
+
+.navbar__links a {
+  margin-left: 16px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.navbar__links a.active {
+  text-decoration: underline;
+}
+
+/* shared UI */
+.spinner {
+  margin-top: 12px;
   text-align: center;
+  font-size: 14px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.error-box {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ffe6e6;
+  border: 1px solid #ff7a7a;
+  color: #8b0000;
+  font-size: 14px;
 }

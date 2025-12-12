@@ -1,40 +1,30 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ItemsListPage from "./pages/ItemsListPage";
-import ItemDetailsPage from "./pages/ItemDetailsPage";
-import FavoritesPage from "./pages/FavoritesPage";
-import ProfilePage from "./pages/ProfilePage";
-import ProtectedRoute from "./components/ProtectedRoute";
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import RootLayout from './components/RootLayout.jsx'
+import Home from './pages/Home.jsx'
+import About from './pages/About.jsx'
+import Login from './pages/Login.jsx'
+import MovieList from './components/MovieList.jsx'
+import MovieDetails from './components/MovieDetails.jsx'
+import Signup from './pages/Signup.jsx'
+import Profile from './pages/Profile.jsx'
+import Favorites from './pages/Favorites.jsx'
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-
-        <Route path="/items" element={<ItemsListPage />} />
-        <Route path="/items/:id" element={<ItemDetailsPage />} />
-
-        <Route path="/favorites" element={<FavoritesPage />} />
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />   {/* 👈 лучше так */}
+          <Route path="about" element={<About />} />
+          <Route path="items" element={<MovieList />} />
+          <Route path="items/:id" element={<MovieDetails />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Route>
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
-
-export default App;
